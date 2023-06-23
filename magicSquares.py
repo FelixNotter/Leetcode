@@ -16,21 +16,13 @@ class Solution:
         visit = set()
         contains = set(range(1,10))
         
-        
+        #Making sure the grid is valid before any checks
         for i in range(3):
             for j in range(3):
                 if (board[i+r][j+c] in visit) or (board[i+r][j+c] not in contains):
                     return False
                 visit.add(board[i+r][j+c])
        
-        grid = []
-        for i in range(3):
-            row = []
-            for j in range(3):
-                row.append(board[i+r][j+c])
-            grid.append(row)
-        print(grid)
-        
         # checking rows
         for i in range(3):
             row_add = 0
@@ -46,7 +38,7 @@ class Solution:
                 column_add += board[j+r][i+c]
             if column_add != initial_sum:
                 return False
-        
+        #checking primary diagonal
         prim_add = 0
         for i in range(3):
             prim_add += board[i+r][i+c]
