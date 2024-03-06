@@ -1,23 +1,32 @@
 class Solution:
     def findCircleNum(self, isConnected: List[List[int]]) -> int:
-        n = len(isConnected)
-        visit = set()
-        adj = defaultdict(list)
-        for r in range(len(isConnected)):
-            for c in range(len(isConnected[0])):
-                if r!=c:
-                    if isConnected[r][c]:
-                        adj[r+1].append(c+1)
-        def dfs(num):
-            if num in visit:
-                return 
-            visit.add(num)
-            for nei in adj[num]:
-                dfs(nei)
+        parents = [i for i in range(len(isConnected))]
+        rank = [0]*(len(isConnected))
 
-        res = 0 
-        for i in range(1,n+1):
-            if i not in visit:
-                res+=1
-                dfs(i)
-        return res
+        def find(n):
+            if n == parents[n]:
+                return n
+            parents[n] = find(parents[n])
+            return parents[n]
+        
+        def union(a,b):
+            n1 = find(a)
+            n2 = find(b)
+            if n1 == n2:
+                return 0
+            if rank[n2] < rank[n1]:
+                parents[n2] = n1
+            elif rank[n1] < rank[n2]:
+                parents[n1] = n2
+            else:
+                parents[n1] = n2
+                rank[n2]+=1
+            return 1
+        count = 0
+        for i in range(len(isConnected)):
+            for j in range(len(isConnected)):
+                if isConnected[i][j]:
+                    count+=union(i,j)
+        return len(isConnected) - count
+        
+        
